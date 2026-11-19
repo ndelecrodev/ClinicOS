@@ -1,0 +1,13 @@
+{
+  "name": "clinicos",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Monorepo web do ClinicOS (pnpm workspaces + Turborepo). O backend usa Gradle e fica em backend/.",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test"
+  }
+}

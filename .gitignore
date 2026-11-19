@@ -3,3 +3,46 @@ CLAUDE.md
 CLAUDE.local.md
 **/CLAUDE.local.md
 .claude/
+
+# Segredos e configuração local (só o .env.example é versionado)
+.env
+.env.*
+!.env.example
+*.pem
+id_rsa*
+
+# Node, pnpm e Next.js
+node_modules/
+.pnpm-store/
+.next/
+.turbo/
+out/
+coverage/
+playwright-report/
+test-results/
+*.tsbuildinfo
+npm-debug.log*
+pnpm-debug.log*
+
+# Gradle e Java
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+*.class
+*.log
+hs_err_pid*
+
+# IDEs (compartilhe só o que for útil para todos)
+.idea/*
+!.idea/codeStyles/
+!.idea/inspectionProfiles/
+*.iml
+.vscode/*
+!.vscode/extensions.json
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Dados locais de contêineres
+infra/compose/data/

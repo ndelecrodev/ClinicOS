@@ -156,7 +156,7 @@ clinicos/
 ├── infra/               Docker Compose e implantação
 ├── tools/seed/          Gerador de dados sintéticos
 ├── docs/                PRD, ADRs, runbooks e segurança
-└── .github/             Workflows de CI, CODEOWNERS e template de PR
+└── .github/             Workflows de CI e template de PR
 ```
 
 <p align="right"><a href="#top">voltar ao topo</a></p>
