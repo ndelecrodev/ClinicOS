@@ -200,24 +200,28 @@ A meta é **WCAG 2.2 AA** nos fluxos-chave (login, agenda, criar consulta e port
 
 ## Contribuindo
 
-O repositório segue o desenvolvimento baseado em tronco (*trunk-based*): `main` é a única branch de longa duração e os ajustes entram por Pull Request.
+O fluxo tem duas branches de longa duração: a `develop` integra o trabalho e a `main` guarda o código estável. Nada vai direto para nenhuma das duas.
 
 ```mermaid
 gitGraph
     commit id: "main"
+    branch develop
+    checkout develop
+    commit id: "integração"
     branch feat/nome-curto
     checkout feat/nome-curto
     commit id: "feat: ..."
     commit id: "test: ..."
-    checkout main
+    checkout develop
     merge feat/nome-curto id: "PR (squash)"
-    commit id: "tag vX.Y.Z" tag: "produção"
+    checkout main
+    merge develop id: "release" tag: "vX.Y.Z"
 ```
 
-1. Crie uma branch a partir da `main` atualizada, com prefixo do tipo: `feat/`, `fix/`, `chore/`, `docs/`, `refactor/`, `test/`.
+1. Parta sempre da `develop` atualizada e crie uma branch com prefixo do tipo: `feat/`, `fix/`, `chore/`, `docs/`, `refactor/`, `test/`.
 2. Escreva os commits em português, no padrão [Conventional Commits](https://www.conventionalcommits.org/pt-br/v1.0.0/) e no imperativo, por exemplo `feat(scheduling): adiciona cálculo de slots livres`.
-3. Abra a PR para a `main` preenchendo o [template](.github/pull_request_template.md). O merge é por *squash*.
-4. Produção sai por tag SemVer (`vX.Y.Z`) com aprovação.
+3. Abra a PR para a `develop` preenchendo o [template](.github/pull_request_template.md). O merge é por *squash* e implanta em staging.
+4. A `main` recebe apenas a PR de release, vinda da `develop`. Produção sai por tag SemVer (`vX.Y.Z`) com aprovação.
 
 Os detalhes estão em [CONTRIBUTING.md](CONTRIBUTING.md).
 

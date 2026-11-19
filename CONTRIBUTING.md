@@ -8,13 +8,18 @@ Obrigado por contribuir com o ClinicOS. Este guia descreve o fluxo de branches, 
 - Nunca versione segredos. `.env` fica fora do Git; apenas `.env.example` é versionado.
 - Use somente dados sintéticos em desenvolvimento, testes e demonstrações. Dados pessoais e de saúde são sensíveis (LGPD) e não devem aparecer em logs, traces, analytics ou relatórios de erro.
 
-## Branches (trunk-based)
+## Branches
 
-`main` é a única branch de longa duração: sempre estável e implantável. O merge na `main` implanta em staging; produção sai por tag SemVer (`vX.Y.Z`) com aprovação.
+Há duas branches de longa duração:
 
-- Crie branches a partir da `main` atualizada, deixe-as viver poucos dias e devolva-as por Pull Request.
+- `main`: sempre estável e implantável. Só recebe a PR de release, vinda da `develop`. Produção sai por tag SemVer (`vX.Y.Z`) sobre a `main`, com aprovação.
+- `develop`: branch de integração. Todo trabalho entra por ela, e o merge na `develop` implanta em staging.
+
+Regras:
+
+- Crie branches de trabalho a partir da `develop` atualizada, deixe-as viver poucos dias e devolva-as por Pull Request para a `develop`.
 - Mudanças grandes ou arriscadas entram atrás de feature flag, não em branch longa.
-- Não faça commit nem push direto na `main`.
+- Não faça commit nem push direto na `main` nem na `develop`.
 - Uma branch por assunto.
 
 Formato: `<tipo>/<nome-curto>`, em minúsculas, com hífens e sem acento. Com issue: `<tipo>/<numero>-<nome-curto>`.
@@ -77,7 +82,7 @@ Regras:
 
 ## Pull Requests
 
-- Base: `main`. O título segue o padrão de commits, pois o merge por squash o usa como mensagem final.
+- Base: `develop`. A `main` só recebe a PR de release (`develop` para `main`). O título segue o padrão de commits, pois o merge por squash o usa como mensagem final.
 - Preencha o template em `.github/pull_request_template.md`: o que mudou, por quê, como testar, riscos e capturas de tela quando houver UI.
 - Mantenha a PR pequena e focada; use rascunho (draft) enquanto estiver incompleta.
 - Checklist de pronto:
@@ -86,7 +91,8 @@ Regras:
   - OpenAPI e `api-client` regenerados quando o contrato mudar;
   - migração compatível com a versão anterior;
   - acessibilidade verificada em mudanças de UI (WCAG 2.2 AA).
-- O merge é feito por **squash**.
+- O merge das PRs de trabalho na `develop` é feito por **squash**.
+- A PR de release (`develop` para `main`) usa merge commit, para manter o histórico da `develop` alinhado com a `main`.
 
 ## Convenções de código
 
