@@ -1,0 +1,19 @@
+# Normaliza finais de linha: o repositório guarda LF.
+* text=auto eol=lf
+
+# Scripts que precisam de finais de linha específicos.
+*.sh text eol=lf
+gradlew text eol=lf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binários.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.woff binary
+*.woff2 binary
+*.jar binary
