@@ -1,0 +1,14 @@
+# Catálogo de versões do backend. Só o que o Spring Boot não gerencia fica aqui.
+# O BOM do Spring Boot já fixa as versões de Flyway, Testcontainers, JUnit, Jackson e do driver do PostgreSQL.
+# Versões confirmadas em 2026-11-19 nos blogs oficiais do Spring; revisar a cada sprint.
+
+[versions]
+java = "25"
+spring-boot = "4.1.2"
+spring-modulith = "2.1.1"
+
+[libraries]
+spring-modulith-bom = { module = "org.springframework.modulith:spring-modulith-bom", version.ref = "spring-modulith" }
+
+[plugins]
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }

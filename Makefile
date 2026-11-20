@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help install build lint typecheck test
+.PHONY: help install build lint typecheck test up down logs backend-test
 
 help: ## Lista os comandos disponíveis
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-12s %s\n", $$1, $$2}'
@@ -19,3 +19,15 @@ typecheck: ## Verifica os tipos do monorepo web
 
 test: ## Roda os testes do monorepo web
 	pnpm test
+
+up: ## Sobe Postgres, Mailpit e o mock do WhatsApp
+	docker compose --env-file .env -f infra/compose/compose.yaml up -d
+
+down: ## Derruba os servicos locais (mantem os dados)
+	docker compose --env-file .env -f infra/compose/compose.yaml down
+
+logs: ## Acompanha os logs dos servicos locais
+	docker compose --env-file .env -f infra/compose/compose.yaml logs -f
+
+backend-test: ## Roda os testes do backend (requer Docker e o Gradle Wrapper)
+	cd backend && ./gradlew test

@@ -33,9 +33,9 @@ build/
 hs_err_pid*
 
 # IDEs (compartilhe só o que for útil para todos)
-.idea/*
-!.idea/codeStyles/
-!.idea/inspectionProfiles/
+**/.idea/*
+!**/.idea/codeStyles/
+!**/.idea/inspectionProfiles/
 *.iml
 .vscode/*
 !.vscode/extensions.json

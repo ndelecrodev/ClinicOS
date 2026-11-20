@@ -1,0 +1,39 @@
+# Serviços locais de desenvolvimento. Uso: docker compose --env-file .env -f infra/compose/compose.yaml up -d
+# Não verificado: o Docker local estava desatualizado quando este arquivo foi escrito.
+name: clinicos
+
+services:
+  postgres:
+    image: postgres:18
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-clinicos}
+      POSTGRES_USER: ${POSTGRES_USER:-clinicos}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?defina POSTGRES_PASSWORD no .env}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      # PostgreSQL 18 guarda os dados em /var/lib/postgresql (não mais em /data).
+      - postgres-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  mailpit:
+    # Pinar a versão depois de validar com o Docker atualizado.
+    image: axllent/mailpit:latest
+    ports:
+      - "${MAIL_PORT:-1025}:1025"
+      - "${MAILPIT_UI_PORT:-8025}:8025"
+
+  whatsapp-mock:
+    # Servidor de mocks HTTP; os stubs ficam em infra/compose/whatsapp-mock.
+    image: wiremock/wiremock:latest
+    ports:
+      - "8089:8080"
+    volumes:
+      - ./whatsapp-mock:/home/wiremock:ro
+
+volumes:
+  postgres-data:
