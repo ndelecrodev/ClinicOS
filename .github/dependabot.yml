@@ -1,0 +1,50 @@
+version: 2
+
+# Atualizações semanais de versão. Dependências do mesmo tipo vêm agrupadas numa PR só,
+# para não gerar uma PR por biblioteca. As PRs entram na develop e seguem o fluxo normal.
+# O ecossistema npm (pnpm) entra quando o app web existir (etapa d).
+updates:
+  # Actions dos workflows (fixadas por SHA: o Dependabot troca o SHA e o comentário da versão).
+  - package-ecosystem: github-actions
+    directory: /
+    target-branch: develop
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: America/Sao_Paulo
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      github-actions:
+        patterns: ["*"]
+
+  # Backend: plugin do Spring Boot, Modulith e demais itens do catálogo libs.versions.toml.
+  - package-ecosystem: gradle
+    directory: /backend
+    target-branch: develop
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: America/Sao_Paulo
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      gradle-minor-patch:
+        update-types: [minor, patch]
+
+  # Imagens do compose local (Postgres, Mailpit, WireMock).
+  - package-ecosystem: docker-compose
+    directory: /infra/compose
+    target-branch: develop
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: America/Sao_Paulo
+    commit-message:
+      prefix: chore
+      include: scope
