@@ -1,0 +1,76 @@
+name: ci-backend
+
+# Compila e testa o backend. Os testes de integração usam Testcontainers,
+# e o runner ubuntu-latest já traz o Docker.
+on:
+  pull_request:
+    branches: [develop, main]
+  push:
+    branches: [develop, main]
+
+# Permissão mínima: o workflow só lê o repositório.
+permissions:
+  contents: read
+
+# Uma execução por branch: um push novo cancela a anterior.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: build e testes
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - name: Baixa o código
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Instala o JDK 25
+        uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6.3.0
+        with:
+          distribution: temurin
+          java-version: "25" # manter igual a backend/gradle/libs.versions.toml
+
+      - name: Configura o Gradle com cache
+        uses: gradle/actions/setup-gradle@7296c772c13d12d9871528814b51fb2143c138ef # v6.4.1
+
+      - name: Compila e roda os testes
+        run: ./gradlew build
+
+  # Envia o grafo de dependências ao GitHub, para o dependency-review enxergar as bibliotecas do Gradle.
+  # Roda só em push, e é o único job com permissão de escrita.
+  dependency-graph:
+    name: grafo de dependências
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - name: Baixa o código
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Instala o JDK 25
+        uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6.3.0
+        with:
+          distribution: temurin
+          java-version: "25"
+
+      - name: Gera e envia o grafo de dependências
+        uses: gradle/actions/setup-gradle@7296c772c13d12d9871528814b51fb2143c138ef # v6.4.1
+        with:
+          dependency-graph: generate-and-submit
+
+      - name: Resolve as dependências
+        run: ./gradlew classes testClasses

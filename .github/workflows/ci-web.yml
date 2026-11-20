@@ -1,0 +1,69 @@
+name: ci-web
+
+# Lint, tipos, testes e build do monorepo web (pnpm + Turborepo).
+# Enquanto não existir o app web, os passos são pulados e o job termina verde.
+on:
+  pull_request:
+    branches: [develop, main]
+  push:
+    branches: [develop, main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  web:
+    name: lint, tipos, testes e build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Baixa o código
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Detecta o app web
+        id: detect
+        run: |
+          if [ -f apps/web/package.json ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::apps/web ainda não existe; passos do web pulados."
+          fi
+
+      # A versão do pnpm vem do campo packageManager do package.json (definido na etapa d).
+      - name: Instala o pnpm
+        if: steps.detect.outputs.present == 'true'
+        uses: pnpm/action-setup@9bbca1e9dc2902adb87e8780fe5c98796985a62d # v6.1.1
+
+      - name: Instala o Node.js
+        if: steps.detect.outputs.present == 'true'
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - name: Instala as dependências
+        if: steps.detect.outputs.present == 'true'
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        if: steps.detect.outputs.present == 'true'
+        run: pnpm lint
+
+      - name: Verifica os tipos
+        if: steps.detect.outputs.present == 'true'
+        run: pnpm typecheck
+
+      - name: Testes
+        if: steps.detect.outputs.present == 'true'
+        run: pnpm test
+
+      - name: Build
+        if: steps.detect.outputs.present == 'true'
+        run: pnpm build
