@@ -1,0 +1,34 @@
+# Configuração comum a todos os perfis.
+# Conexão com o banco vem do ambiente (SPRING_DATASOURCE_URL, _USERNAME, _PASSWORD), nunca do arquivo.
+spring:
+  application:
+    name: clinicos-backend
+  flyway:
+    locations: classpath:db/migration
+  jackson:
+    default-property-inclusion: non_null
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+---
+# Perfil api: atende requisições HTTP.
+spring:
+  config:
+    activate:
+      on-profile: api
+
+server:
+  port: 8080
+
+---
+# Perfil worker: processa jobs e outbox, sem servidor HTTP.
+spring:
+  config:
+    activate:
+      on-profile: worker
+  main:
+    web-application-type: none
