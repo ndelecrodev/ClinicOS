@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help install build lint typecheck test up down logs backend-test
+.PHONY: help install build lint typecheck test up down logs backend-test hooks
 
 help: ## Lista os comandos disponíveis
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-12s %s\n", $$1, $$2}'
@@ -31,3 +31,7 @@ logs: ## Acompanha os logs dos servicos locais
 
 backend-test: ## Roda os testes do backend (requer Docker e o Gradle Wrapper)
 	cd backend && ./gradlew test
+
+hooks: ## Instala o pre-commit (via uv) e ativa os hooks de commit e de mensagem
+	uv tool install pre-commit
+	pre-commit install --hook-type pre-commit --hook-type commit-msg
