@@ -1,0 +1,25 @@
+name: release-drafter
+
+# O Release Drafter lê .github/release-drafter.yml da branch padrão, então só roda
+# quando uma mudança chega na main (PR de release develop -> main).
+# Ele mantém um RASCUNHO de release com as PRs agrupadas por label. Não publica:
+# a produção sai por tag SemVer com aprovação, e publicar o rascunho é essa aprovação.
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  rascunho:
+    name: atualiza o rascunho de release
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - name: Atualiza o rascunho
+        uses: release-drafter/release-drafter@d1a19e60e81a7e650d00a7de9277f87e439117ea # v7.11.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

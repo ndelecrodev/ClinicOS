@@ -1,0 +1,18 @@
+# Labels aplicados a partir do prefixo da branch. Os nomes coincidem com as
+# categorias do release-drafter.yml, para as notas de release agruparem cada PR.
+feature:
+  - head-branch: ['^feat/']
+fix:
+  - head-branch: ['^fix/', '^revert/']
+performance:
+  - head-branch: ['^perf/']
+refactor:
+  - head-branch: ['^refactor/']
+documentation:
+  - head-branch: ['^docs/']
+test:
+  - head-branch: ['^test/']
+chore:
+  - head-branch: ['^chore/', '^ci/', '^build/', '^style/']
+dependencies:
+  - head-branch: ['^dependabot/']
