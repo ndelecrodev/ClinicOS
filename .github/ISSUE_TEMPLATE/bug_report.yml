@@ -1,0 +1,62 @@
+name: Relatório de bug
+description: Algo não funcionou como o esperado
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Quanto mais contexto, mais rápido a correção.
+
+        **Não cole dados de pessoas ou de saúde, tokens, chaves de API nem o conteúdo do `.env`.**
+        Use somente dados sintéticos. Se um log tiver algum desses valores, apague-os antes de colar.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Em qual área aconteceu?
+      options:
+        - Web (interface)
+        - Backend (API)
+        - Identity (acesso e sessão)
+        - Tenancy (clínicas e isolamento)
+        - Patients (pacientes)
+        - Staffservices (profissionais e serviços)
+        - Scheduling (agenda)
+        - Notifications (e-mail e WhatsApp)
+        - Analytics (relatórios)
+        - Platformadmin (administração da plataforma)
+        - Banco de dados e migrações
+        - CI e infraestrutura
+        - Não sei
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: O que aconteceu?
+      description: Descreva o comportamento observado.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: O que era esperado?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Como reproduzir
+      placeholder: |
+        1. ...
+        2. ...
+    validations:
+      required: false
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs ou mensagem de erro
+      description: Cole o trecho relevante, sem segredos nem dados pessoais.
+      render: shell
+    validations:
+      required: false

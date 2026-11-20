@@ -1,0 +1,50 @@
+name: Sugestão de melhoria
+description: Proponha uma funcionalidade ou uma mudança de comportamento
+title: "[Feature] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Qual problema isso resolve?
+      description: Explique a necessidade antes da solução.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Qual é a proposta?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternativas consideradas
+    validations:
+      required: false
+  - type: checkboxes
+    id: impact
+    attributes:
+      label: O que isso toca?
+      options:
+        - label: Contrato da API (OpenAPI)
+        - label: Schema do banco (migração Flyway)
+        - label: Isolamento entre clínicas (tenant, RLS)
+        - label: Permissões e papéis
+        - label: Dados de pessoas ou de saúde (LGPD)
+        - label: Interface e acessibilidade
+        - label: Configuração (`.env`, secrets)
+  - type: input
+    id: prd
+    attributes:
+      label: Requisito do PRD relacionado
+      description: Por exemplo, RF-AGD-05. Deixe em branco se não houver.
+    validations:
+      required: false
+  - type: textarea
+    id: context
+    attributes:
+      label: Contexto adicional
+      description: Se contradiz uma ADR, cite qual.
+    validations:
+      required: false
